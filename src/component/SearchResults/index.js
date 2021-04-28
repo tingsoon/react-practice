@@ -15,6 +15,7 @@ import {
   CardActionArea,
   CardContent,
 } from "@material-ui/core";
+
 import { searchContent } from "../../services/searchResults/action";
 
 function SearchResults() {
@@ -59,16 +60,15 @@ function SearchResults() {
           <br />
           {/* Display loading */}
           {data.isLoading && (
-            <div>
               <Typography>
                 Loading... <CircularProgress />
               </Typography>
-            </div>
           )}
-
-          <Typography style={{ color: "gray" }} variant="h5">
-            {data.totalProperties} properties found
-          </Typography>
+          {!data.isLoading && (
+            <Typography style={{ color: "gray" }} variant="h5">
+              {data.totalProperties} properties found
+            </Typography>
+          )}
           <br />
           <br />
           <Container>
@@ -93,13 +93,13 @@ function SearchResults() {
                       <Typography
                         variant="body2"
                         color="textSecondary"
-                        component="p"
+                        component="h6"
                       >
                         {x.description}
                       </Typography>
                       <Typography
-                        variant="body2"
-                        color="textSecondary"
+                        variant="body1"
+                        color="textPrimary"
                         component="p"
                       >
                         Price:{" "}

@@ -10,8 +10,21 @@ export function getAll() {
   });
 }
 
+export function getAllFiltered(type, min, max) {
+  return request(baseUrl, {
+    method: "GET",
+    url: "/test",
+    params: {
+      type: type,
+      min: min,
+      max: max,
+    }
+  });
+}
+
 const SearchService = {
   getAll,
+  getAllFiltered,
 };
 
 export default SearchService;
