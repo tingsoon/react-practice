@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from "./styles";
 
-// import request from "../../utils/request";
-// import { Config } from "../../config";
-
 import {
   Container,
   Typography,
@@ -15,8 +12,9 @@ import {
   CardActionArea,
   CardContent,
 } from "@material-ui/core";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import { searchContent } from "../../services/searchResults/action";
+import { searchOffsetContent } from "../../services/searchResults/action";
 
 function SearchResults() {
   const styles = useStyles();
@@ -25,26 +23,33 @@ function SearchResults() {
   // redux store logic
   const data = useSelector((state) => state.searchResults);
 
-  // const baseUrl = Config.AUTH_API_URL;
-
-  // test retrieve api && it works..
-  // useEffect(() => {
-  //   // Run! Like go get some data from an API.
-  //   request(baseUrl, {
-  //     method: "GET",
-  //     url: "/test",
-  //     // data: {},
-  //   })
-  //     // .then(handleResponse)
-  //     .then((response) => {
-  //       console.log(response);
-  //     });
-  // }, []);
-
-  // test dispatch action
+  // test dispatch action for infinite loading
   useEffect(() => {
-    dispatch(searchContent());
+    dispatch(
+      searchOffsetContent(
+        data.type,
+        data.min,
+        data.max,
+        data.limit,
+        data.offset
+      )
+    );
   }, []);
+
+  // fetch more data using infinite loading
+  const fetchMoreData = () => {
+    setTimeout(() => {
+      dispatch(
+        searchOffsetContent(
+          data.type,
+          data.min,
+          data.max,
+          data.limit,
+          data.offset
+        )
+      );
+    }, 2000);
+  };
 
   return (
     <main className={styles.content}>
@@ -60,9 +65,9 @@ function SearchResults() {
           <br />
           {/* Display loading */}
           {data.isLoading && (
-              <Typography>
-                Loading... <CircularProgress />
-              </Typography>
+            <Typography>
+              Loading... <CircularProgress />
+            </Typography>
           )}
           {!data.isLoading && (
             <Typography style={{ color: "gray" }} variant="h5">
@@ -72,48 +77,64 @@ function SearchResults() {
           <br />
           <br />
           <Container>
-            {data.list.map((x, id) => {
-              return (
-                <Card
-                  className={styles.rootCard}
-                  classes={{
-                    root: styles.card,
-                  }}
-                >
-                  <CardActionArea>
-                    <CardMedia
-                      className={styles.media}
-                      image={x.imageurl}
-                      title={x.title}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {x.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="h6"
-                      >
-                        {x.description}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        color="textPrimary"
-                        component="p"
-                      >
-                        Price:{" "}
-                        {x.price.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                          maximumFractionDigits: 0,
-                        })}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              );
-            })}
+            <InfiniteScroll
+              dataLength={data.list.length}
+              next={fetchMoreData}
+              hasMore={data.hasMore}
+              loader={
+                <h3 style={{ textAlign: "center" }}>
+                  <b>Loading more properties...</b>
+                </h3>
+              }
+              endMessage={
+                <h3 style={{ textAlign: "center" }}>
+                  <b>No More Results.</b>
+                </h3>
+              }
+            >
+              {data.list.map((x, id) => {
+                return (
+                  <Card
+                    className={styles.rootCard}
+                    classes={{
+                      root: styles.card,
+                    }}
+                  >
+                    <CardActionArea>
+                      <CardMedia
+                        className={styles.media}
+                        image={x.imageurl}
+                        title={x.title}
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {x.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="h6"
+                        >
+                          {x.description}
+                        </Typography>
+                        <Typography
+                          variant="body1"
+                          color="textPrimary"
+                          component="p"
+                        >
+                          Price:{" "}
+                          {x.price.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 0,
+                          })}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                );
+              })}
+            </InfiniteScroll>
           </Container>
         </Container>
       </div>

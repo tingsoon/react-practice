@@ -22,9 +22,24 @@ export function getAllFiltered(type, min, max) {
   });
 }
 
+export function getOffset(type, min, max, limit, offset) {
+  return request(baseUrl, {
+    method: "GET",
+    url: "/test",
+    params: {
+      type: type,
+      min: min,
+      max: max,
+      limit: limit,
+      offset: offset
+    }
+  });
+}
+
 const SearchService = {
   getAll,
   getAllFiltered,
+  getOffset,
 };
 
 export default SearchService;

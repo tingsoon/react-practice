@@ -18,14 +18,16 @@ import {
   InputAdornment,
   Button,
 } from "@material-ui/core";
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import FilterListIcon from "@material-ui/icons/FilterList";
 
-import { Formik } from 'formik';
+import { Formik } from "formik";
 
-import { searchFilteredContent } from "../../services/searchResults/action";
+import {
+  searchFilteredContent,
+  updateFilter,
+  resetValues,
+} from "../../services/searchResults/action";
 
 import useStyles from "./styles";
 
@@ -66,32 +68,43 @@ export function Header() {
   // const [minPrice, setMinPrice] = useState(0);
   // const [maxPrice, setMaxPrice] = useState(0);
 
+  // redux store logic
+  const data = useSelector((state) => state.searchResults);
 
   const validate = (values) => {
     let errors = {};
     const regex = /^[0-9]*$/;
 
-    if (!regex.test(values.minAmount) && values.minAmount !== '') {
+    if (!regex.test(values.minAmount) && values.minAmount !== "") {
       errors.minAmount = "Please enter numeric numbers";
     }
 
-    if (!regex.test(values.maxAmount) && values.maxAmount !== '') {
+    if (!regex.test(values.maxAmount) && values.maxAmount !== "") {
       errors.maxAmount = "Please enter numeric numbers";
     }
 
-    if(values.minAmount > values.maxAmount && values.minAmount && values.maxAmount) {
-      errors.minAmount = "Min amount cannot be more than max amount"
+    if (
+      values.minAmount > values.maxAmount &&
+      values.minAmount &&
+      values.maxAmount
+    ) {
+      errors.minAmount = "Min amount cannot be more than max amount";
     }
 
     return errors;
   };
 
   const submitForm = (values) => {
-    const min = Number(values.minAmount) === 0 ? '' : Number(values.minAmount);
-    const max = Number(values.maxAmount) === 0 ? '' : Number(values.maxAmount);
-    const type = values.bedroom === -1 ? '' : values.bedroom;
+    const min = Number(values.minAmount) === 0 ? "" : Number(values.minAmount);
+    const max = Number(values.maxAmount) === 0 ? "" : Number(values.maxAmount);
+    const type = values.bedroom === -1 ? "" : values.bedroom;
 
-    dispatch(searchFilteredContent(type, min, max));
+    dispatch(resetValues());
+    setTimeout(() => {
+      dispatch(searchFilteredContent(type, min, max, 4, 0));
+    });
+
+    dispatch(updateFilter(type, min, max));
     handleDrawerClose();
   };
 
@@ -103,23 +116,10 @@ export function Header() {
     setOpen(false);
   };
 
-  // const handleChangeBedroom = (event) => {
-  //   setBedroom(event.target.value);
-  // };
-
-  // const handleChangeMinAmount = (event) => {
-  //   setMinPrice(event.target.value);
-  // };
-
-  // console log filter options
-  // useEffect(() => {
-  //   console.log("bedroom", bedroom);
-  // }, [bedroom]);
-
   const drawer = (
     <Container>
       <Formik
-        initialValues={{ minAmount: '', maxAmount: '', bedroom: ''}}
+        initialValues={{ minAmount: "", maxAmount: "", bedroom: "" }}
         validate={validate}
         onSubmit={submitForm}
       >
@@ -142,9 +142,7 @@ export function Header() {
                 id="bedroomFilter"
                 label="Filter Number of Bedrooms"
                 name="bedroom"
-                // value={bedroom}
                 value={values.bedroom}
-                // onChange={handleChangeBedroom}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 variant="outlined"
@@ -165,7 +163,6 @@ export function Header() {
                   id="minAmount"
                   value={values.minAmount}
                   name="minAmount"
-                  // onChange={handleChangeMinAmount}
                   startAdornment={
                     <InputAdornment position="start">$</InputAdornment>
                   }
@@ -174,7 +171,7 @@ export function Header() {
                   onBlur={handleBlur}
                 />
                 {errors.minAmount && touched.minAmount && (
-                  <span style={{color: 'red'}}>{errors.minAmount}</span>
+                  <span style={{ color: "red" }}>{errors.minAmount}</span>
                 )}
               </FormControl>
               <br />
@@ -187,7 +184,6 @@ export function Header() {
                   id="maxAmount"
                   value={values.maxAmount}
                   name="maxAmount"
-                  // onChange={handleChangeMinAmount}
                   startAdornment={
                     <InputAdornment position="start">$</InputAdornment>
                   }
@@ -196,7 +192,7 @@ export function Header() {
                   onBlur={handleBlur}
                 />
                 {errors.maxAmount && touched.maxAmount && (
-                  <span style={{color: 'red'}}>{errors.maxAmount}</span>
+                  <span style={{ color: "red" }}>{errors.maxAmount}</span>
                 )}
               </FormControl>
               <br />
