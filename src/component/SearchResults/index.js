@@ -16,6 +16,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 import { searchOffsetContent } from "../../services/searchResults/action";
 
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 function SearchResults() {
   const styles = useStyles();
   const dispatch = useDispatch();
@@ -63,6 +69,10 @@ function SearchResults() {
         <Container>
           <Typography variant="h3">Search Properties</Typography>
           <br />
+          {/* Display alert snackbar */}
+          {data.errorMessage && (
+            <Alert style={{marginTop: 20, marginBottom: 20}} severity="error">{data.errorMessage}</Alert>
+          )}
           {/* Display loading */}
           {data.isLoading && (
             <Typography>

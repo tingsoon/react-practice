@@ -1,7 +1,7 @@
 import { searchResultsConstants } from "./constants";
 
-import { getAll as getAllService } from "./service";
-import { getAllFiltered as getAllFilteredService } from "./service";
+// import { getAll as getAllService } from "./service";
+// import { getAllFiltered as getAllFilteredService } from "./service";
 import { getOffset as getOffsetService } from "./service";
 
 // export function searchContent() {
@@ -19,37 +19,49 @@ import { getOffset as getOffsetService } from "./service";
 export function searchFilteredContent(type, min, max, limit, offset) {
   return (dispatch) => {
     dispatch(isLoading());
+    dispatch(clearErrorMessage());
     dispatch(resetValues());
 
-    getOffsetService(type, min, max, limit, offset).then((response) => {
-      const data = response;
-      const offsetValue = data.list.length;
-      console.log("data", data);
-      console.log("offsetValue", offsetValue);
-      dispatch(initialFilterLoadingContent(data));
-      dispatch(updateOffset(offsetValue));
-      if (offsetValue <= 3) {
-        dispatch(updateHasMore());
-      }
-    });
+    getOffsetService(type, min, max, limit, offset)
+      .then((response) => {
+        const data = response;
+        const offsetValue = data.list.length;
+        // console.log("data", data);
+        // console.log("offsetValue", offsetValue);
+        dispatch(initialFilterLoadingContent(data));
+        dispatch(updateOffset(offsetValue));
+        if (offsetValue <= 3) {
+          dispatch(updateHasMore());
+        }
+      })
+      .catch((response) => {
+        // console.log(response);
+        dispatch(showErrorMessage(response));
+      });
   };
 }
 
 export function searchOffsetContent(type, min, max, limit, offset) {
   return (dispatch) => {
     dispatch(isLoading());
+    dispatch(clearErrorMessage());
 
-    getOffsetService(type, min, max, limit, offset).then((response) => {
-      const data = response;
-      const offsetValue = data.list.length;
-      console.log("data", data);
-      console.log("offsetValue", offsetValue);
-      dispatch(updateLoadingContent(data));
-      dispatch(updateOffset(offsetValue));
-      if (offsetValue <= 3) {
-        dispatch(updateHasMore());
-      }
-    });
+    getOffsetService(type, min, max, limit, offset)
+      .then((response) => {
+        const data = response;
+        const offsetValue = data.list.length;
+        // console.log("data", data);
+        // console.log("offsetValue", offsetValue);
+        dispatch(updateLoadingContent(data));
+        dispatch(updateOffset(offsetValue));
+        if (offsetValue <= 3) {
+          dispatch(updateHasMore());
+        }
+      })
+      .catch((response) => {
+        // console.log(response);
+        dispatch(showErrorMessage(response));
+      });
   };
 }
 
@@ -98,4 +110,15 @@ function updateHasMore() {
 
 export function resetValues() {
   return { type: searchResultsConstants.RESET_VALUES };
+}
+
+function showErrorMessage(errorMessage) {
+  return {
+    type: searchResultsConstants.SHOW_ERROR_MESSAGE,
+    errorMessage: errorMessage,
+  };
+}
+
+function clearErrorMessage() {
+  return { type: searchResultsConstants.CLEAR_ERROR_MESSAGE };
 }

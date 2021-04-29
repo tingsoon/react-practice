@@ -11,6 +11,7 @@ const initialState = {
   min: "",
   max: "",
   hasMore: true,
+  errorMessage: "",
 };
 // add reducer function to update state from api call
 export function searchResults(state = initialState, action) {
@@ -70,6 +71,16 @@ export function searchResults(state = initialState, action) {
         offset: 0,
         limit: 4,
         hasMore: true,
+      };
+    case searchResultsConstants.SHOW_ERROR_MESSAGE:
+      return {
+        ...state,
+        errorMessage: action.errorMessage,
+      };
+    case searchResultsConstants.CLEAR_ERROR_MESSAGE:
+      return {
+        ...state,
+        errorMessage: "",
       };
     default:
       return state;
