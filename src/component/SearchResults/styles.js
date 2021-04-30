@@ -1,4 +1,4 @@
-import {makeStyles, fade} from '@material-ui/core/styles';
+import { makeStyles, fade } from "@material-ui/core/styles";
 // const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
@@ -7,25 +7,33 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(3),
-    minHeight: '100vh',
+    minHeight: "100vh",
   },
   root: {
-    display: 'block',
+    display: "block",
   },
   title: {
     fontSize: 28,
-    color: '#161616',
+    color: "#161616",
   },
   rootCard: {
     // maxWidth: 345,
-    margin: 'auto',
+    margin: "auto",
     padding: 20,
   },
   media: {
     height: 500,
   },
   card: {
-      boxShadow: 'none'
+    boxShadow: "none",
+  },
+  alert: {
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  loading: {
+    display: "inline-block",
+    marginRight: 20,
   },
 }));
 

@@ -29,48 +29,21 @@ import {
   resetValues,
 } from "../../services/searchResults/action";
 
-import useStyles from "./styles";
+import {bedrooms} from './dropdown';
 
-const bedrooms = [
-  {
-    value: "None",
-    label: -1,
-  },
-  {
-    value: "Studio",
-    label: 0,
-  },
-  {
-    value: "1 Bedroom",
-    label: 1,
-  },
-  {
-    value: "2 Bedrooms",
-    label: 2,
-  },
-  {
-    value: "3 Bedrooms",
-    label: 3,
-  },
-  {
-    value: ">=4 Bedrooms",
-    label: 4,
-  },
-];
+import useStyles from "./styles";
 
 export function Header() {
   const styles = useStyles();
   const dispatch = useDispatch();
-  // const theme = useTheme();
 
+  // for drawer open, close
   const [open, setOpen] = useState(false);
-  // const [bedroom, setBedroom] = useState("");
-  // const [minPrice, setMinPrice] = useState(0);
-  // const [maxPrice, setMaxPrice] = useState(0);
 
   // redux store logic
-  const data = useSelector((state) => state.searchResults);
+  // const data = useSelector((state) => state.searchResults);
 
+  // filter validations
   const validate = (values) => {
     let errors = {};
     const regex = /^[0-9]*$/;
@@ -94,6 +67,7 @@ export function Header() {
     return errors;
   };
 
+  // filter form submission
   const submitForm = (values) => {
     const min = Number(values.minAmount) === 0 ? "" : Number(values.minAmount);
     const max = Number(values.maxAmount) === 0 ? "" : Number(values.maxAmount);
@@ -116,6 +90,7 @@ export function Header() {
     setOpen(false);
   };
 
+  // display filter options
   const drawer = (
     <Container>
       <Formik

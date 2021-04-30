@@ -11,6 +11,7 @@ import {
   CardMedia,
   CardActionArea,
   CardContent,
+  Box,
 } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -71,13 +72,17 @@ function SearchResults() {
           <br />
           {/* Display alert snackbar */}
           {data.errorMessage && (
-            <Alert style={{marginTop: 20, marginBottom: 20}} severity="error">{data.errorMessage}</Alert>
+            <Alert 
+            className={styles.alert} severity="error">
+              {data.errorMessage}
+            </Alert>
           )}
           {/* Display loading */}
           {data.isLoading && (
-            <Typography>
-              Loading... <CircularProgress />
-            </Typography>
+            <Box>
+              <Typography className={styles.loading}>Loading...</Typography>
+              <CircularProgress  />
+            </Box>
           )}
           {!data.isLoading && (
             <Typography style={{ color: "gray" }} variant="h5">
@@ -105,6 +110,7 @@ function SearchResults() {
               {data.list.map((x, id) => {
                 return (
                   <Card
+                    key={id}
                     className={styles.rootCard}
                     classes={{
                       root: styles.card,
