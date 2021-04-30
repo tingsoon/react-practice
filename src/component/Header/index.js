@@ -74,9 +74,11 @@ export function Header() {
     const type = values.bedroom === -1 ? "" : values.bedroom;
 
     dispatch(resetValues());
-    setTimeout(() => {
-      dispatch(searchFilteredContent(type, min, max, 4, 0));
-    });
+    // setTimeout(() => {
+    //   dispatch(searchFilteredContent(type, min, max, 4, 0));
+    // });
+
+    dispatch(searchFilteredContent(type, min, max, 4, 0))
 
     dispatch(updateFilter(type, min, max));
     handleDrawerClose();

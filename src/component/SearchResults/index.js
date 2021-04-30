@@ -45,17 +45,26 @@ function SearchResults() {
 
   // fetch more data using infinite loading
   const fetchMoreData = () => {
-    setTimeout(() => {
-      dispatch(
-        searchOffsetContent(
-          data.type,
-          data.min,
-          data.max,
-          data.limit,
-          data.offset
-        )
-      );
-    }, 2000);
+    // setTimeout(() => {
+    //   dispatch(
+    //     searchOffsetContent(
+    //       data.type,
+    //       data.min,
+    //       data.max,
+    //       data.limit,
+    //       data.offset
+    //     )
+    //   );
+    // }, 2000);
+    dispatch(
+      searchOffsetContent(
+        data.type,
+        data.min,
+        data.max,
+        data.limit,
+        data.offset
+      )
+    );
   };
 
   return (
@@ -72,8 +81,7 @@ function SearchResults() {
           <br />
           {/* Display alert snackbar */}
           {data.errorMessage && (
-            <Alert 
-            className={styles.alert} severity="error">
+            <Alert className={styles.alert} severity="error">
               {data.errorMessage}
             </Alert>
           )}
@@ -81,7 +89,7 @@ function SearchResults() {
           {data.isLoading && (
             <Box>
               <Typography className={styles.loading}>Loading...</Typography>
-              <CircularProgress  />
+              <CircularProgress />
             </Box>
           )}
           {!data.isLoading && (
@@ -98,8 +106,8 @@ function SearchResults() {
               hasMore={data.hasMore}
               loader={
                 <h3 style={{ textAlign: "center" }}>
-                  <b>Loading more properties...  </b>
-                  <CircularProgress  />
+                  <b>Loading more properties... </b>
+                  <CircularProgress />
                 </h3>
               }
               endMessage={
