@@ -98,7 +98,8 @@ function SearchResults() {
               hasMore={data.hasMore}
               loader={
                 <h3 style={{ textAlign: "center" }}>
-                  <b>Loading more properties...</b>
+                  <b>Loading more properties...  </b>
+                  <CircularProgress  />
                 </h3>
               }
               endMessage={
