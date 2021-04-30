@@ -29,7 +29,7 @@ import {
   resetValues,
 } from "../../services/searchResults/action";
 
-import {bedrooms} from './dropdown';
+import { bedrooms } from "./dropdown";
 
 import useStyles from "./styles";
 
@@ -50,18 +50,16 @@ export function Header() {
 
     if (!regex.test(values.minAmount) && values.minAmount !== "") {
       errors.minAmount = "Please enter numeric numbers";
-    }
-
-    if (!regex.test(values.maxAmount) && values.maxAmount !== "") {
-      errors.maxAmount = "Please enter numeric numbers";
-    }
-
-    if (
-      values.minAmount > values.maxAmount &&
+    } else if (
+      Number(values.minAmount) > Number(values.maxAmount) &&
       values.minAmount &&
       values.maxAmount
     ) {
       errors.minAmount = "Min amount cannot be more than max amount";
+    }
+
+    if (!regex.test(values.maxAmount) && values.maxAmount !== "") {
+      errors.maxAmount = "Please enter numeric numbers";
     }
 
     return errors;
@@ -78,7 +76,7 @@ export function Header() {
     //   dispatch(searchFilteredContent(type, min, max, 4, 0));
     // });
 
-    dispatch(searchFilteredContent(type, min, max, 4, 0))
+    dispatch(searchFilteredContent(type, min, max, 4, 0));
 
     dispatch(updateFilter(type, min, max));
     handleDrawerClose();
